@@ -76,12 +76,12 @@ for i=0:p
 end
 [g,lambda,exitflag]=linprog(c,[],[],B,d,zeros(M,1),zeros(M,1)+1.e6,c,opts);
 %=========================================================
-% Get a reliable dual solution by solving the dual problem
+% Solve the dual problem
 % A*y <= b y_i: i=0...p, j=0...(k-1),0...(k-1),k
 % epsilon=minimum value of the polynomial at k
 % average=the average value of the polynomial
 r=rmax;
-epsilon=0.0;%not used
+epsilon=0.0; %not used
 average=1.0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%% 
 Aeq=zeros(1,p+1);
