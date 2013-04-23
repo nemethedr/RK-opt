@@ -112,11 +112,13 @@ rts=roots(ypoly);
 
 %=========================================================
 % Prepare outputs
-R=r;
-beta=g(1:k); alpha=g(k+1:end)+r*beta;
+R=rmin;
+beta=g(1:k); alpha=g(k+1:end)+R*beta;
 g
 d;
 B(:,[1 2 6]);
 B;
-y
-rts
+if (rmin > 0.0)
+  y
+  rts
+end
