@@ -75,8 +75,48 @@ for i=0:p
 end
 [g,lambda,exitflag]=linprog(c,[],[],B,d,lb,ub,c,opts);
 %=========================================================
+% Solve the dual problem
+% A*y <= b y_i: i=0...p, j=0...(k-1),0...(k-1),k
+% epsilon=minimum value of the polynomial at k
+% average=the average value of the polynomial
+r=rmax;
+epsilon=0.0; %not used
+average=1.0;
+%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+Aeq=zeros(1,p+1);
+beq=average;
+A=zeros(3*k+1,p+1);
+b=zeros(3*k+1,1); b(end)=-epsilon;
+y=zeros(1,p+1);
+f=zeros(1,p+1);
+for j=0:k-1
+  for i=0:p
+    A(j+1,i+1)=-j^i;
+    A(j+k+1,i+1)=-r*j^i;
+    A(j+2*k+1,i+1)=-r*j^i;
+    if (i > 0)
+      A(j+k+1,i+1)=A(j+k+1,i+1)-i*j^(i-1);
+      A(j+2*k+1,i+1)=A(j+2*k+1,i+1)+i*j^(i-1);
+    end
+  end
+end
+for i=0:p
+  A(3*k+1,i+1)=k^i;
+end
+for i=0:p
+  Aeq(1,i+1)=-sum(A(1:k,i+1))/k;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+[y,lambda,exitflag]=linprog(f,A,b,Aeq,beq,[ ],[ ],y,opts);
+ypoly=y(end:-1:1);% matlab ordering
+rts=roots(ypoly);
+%=========================================================
 
 %Prepare outputs
-R=r;
-beta=g(1:k); tbeta=g(k+1:2*k); alpha=g(2*k+1:end)+r*(beta+tbeta);
+R=rmin;
+beta=g(1:k); tbeta=g(k+1:2*k); alpha=g(2*k+1:end)+R*(beta+tbeta);
 alpha=alpha(end:-1:1); beta=beta(end:-1:1); tbeta=tbeta(end:-1:1);
+if (R > 0.0)
+  y
+  rts
+end
