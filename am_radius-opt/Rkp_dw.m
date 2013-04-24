@@ -76,7 +76,7 @@ end
 [g,lambda,exitflag]=linprog(c,[],[],B,d,lb,ub,c,opts);
 %=========================================================
 % Solve the dual problem
-% A*y <= b y_i: i=0...p, j=0...(k-1),0...(k-1),k
+% A*y <= b y_i: i=0...p, j=0...(k-1),0...(k-1),0...(k-1),k
 % epsilon=minimum value of the polynomial at k
 % average=the average value of the polynomial
 r=rmax;
