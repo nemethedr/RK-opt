@@ -79,13 +79,13 @@ end
 % Solve the dual problem
 % A*y <= b y_i: i=0...p, j=0...(k-1),0...(k-1),k
 % epsilon=minimum value of the polynomial at k
-% average=the average value of the polynomial
+% lcoeff=the leading coefficient of the polynomial
 r=rmax;
 epsilon=0.0; %not used
-average=1.0;
+lcoeff=-1.0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%% 
 Aeq=zeros(1,p+1);
-beq=average;
+beq=lcoeff;
 A=zeros(2*k+1,p+1);
 b=zeros(2*k+1,1); b(end)=-epsilon;
 y=zeros(1,p+1);
@@ -102,9 +102,7 @@ end
 for i=0:p
   A(2*k+1,i+1)=k^i;
 end
-for i=0:p
-  Aeq(1,i+1)=-sum(A(1:k,i+1))/k;
-end
+Aeq(end) = 1.0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%% 
 [y,lambda,exitflag]=linprog(f,A,b,Aeq,beq,[ ],[ ],y,opts);
 ypoly=y(end:-1:1);% matlab ordering
@@ -113,12 +111,16 @@ rts=roots(ypoly);
 %=========================================================
 % Prepare outputs
 R=rmin;
-beta=g(1:k); alpha=g(k+1:end)+R*beta;
-g
+beta=g(1:k);
+alpha=g(k+1:end)+R*beta;
+delta=g(k+1:end);
+g;
 d;
 B(:,[1 2 6]);
 B;
 if (rmin > 0.0)
-  y
-  rts
+  find(beta>1e-8)
+  find(delta>1e-8)
+  % y
+  % rts
 end
