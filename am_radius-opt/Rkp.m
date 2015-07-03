@@ -121,6 +121,8 @@ B;
 if (rmin > 0.0)
   find(beta>1e-8)
   find(delta>1e-8)
+  k-rts
+  rts
   % y
   % rts
 end
